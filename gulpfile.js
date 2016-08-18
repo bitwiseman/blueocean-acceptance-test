@@ -6,9 +6,15 @@
 var gulp  = require('gulp');
 var shell = require('gulp-shell');
 
-if (process.argv.length === 4 && process.argv[2] === '--test') {
-    gulp.task('default', shell.task('nightwatch --suiteRetries 2 ' + process.argv[3].toString()));
+var nightwatch_env = process.env.NIGHTWATCH_ENV_ARG;
+if (nightwatch_env) {
+    nightwatch_env = '--env ' + nightwatch_env + ' '
 } else {
-    gulp.task('default', shell.task('nightwatch --suiteRetries 2'));
+    nightwatch_env = ''
 }
 
+if (process.argv.length === 4 && process.argv[2] === '--test') {
+    gulp.task('default', shell.task('nightwatch --suiteRetries 2 ' + nightwatch_env + process.argv[3].toString()));
+} else {
+    gulp.task('default', shell.task('nightwatch --suiteRetries 2 ' + nightwatch_env ));
+}
